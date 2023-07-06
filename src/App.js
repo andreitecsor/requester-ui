@@ -54,7 +54,7 @@ function App() {
                 pid: pid,
                 fid: fid
             });
-            const data = response.data;
+            console.log(response)
 
             intervalId = setInterval(async () => {
                 const response = await axios.get(`http://localhost:8080/requester/api/v1/${fid}/${pid}`);
@@ -62,9 +62,9 @@ function App() {
 
                 if (data.status === 'done') {
                     clearInterval(intervalId);
+                    setScores(prevScores => [...prevScores, { pid, provider: 'PROVIDER 1', score: data.score || -1 }]);
                 }
 
-                setScores(prevScores => [...prevScores, { pid, provider: 'PROVIDER 1', score: data.score || -1 }]);
             }, 60000);
         } catch (error) {
             console.error('Error:', error);
@@ -73,11 +73,11 @@ function App() {
 
     const getRowColor = (score) => {
         if (score === -1) return '';
-        else if (score === 0) return 'green';
-        else if (score >= 1 && score <= 10) return 'yellow';
-        else if (score >= 11 && score <= 20) return 'orange';
-        else if (score >= 21 && score <= 40) return 'red';
-        else return 'darkred';
+        else if (score === 0) return 'rgba(0, 128, 0, 0.5)'; // green
+        else if (score >= 1 && score <= 10) return 'rgba(255, 255, 0, 0.5)'; // yellow
+        else if (score >= 11 && score <= 20) return 'rgba(255, 165, 0, 0.5)'; // orange
+        else if (score >= 21 && score <= 40) return 'rgba(255, 0, 0, 0.5)'; // red
+        else return 'rgba(139, 0, 0, 0.5)'; // dark red
     };
 
     return (
